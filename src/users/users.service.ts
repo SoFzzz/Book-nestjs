@@ -124,8 +124,11 @@ export class UsersService {
   }
 
   async delete(id: number) {
-    await this.findOne(id);
-    await this.userRepository.delete(id);
+    const user = await this.findOne(id);
+    if(!user){
+      throw new NotFoundException(`Usuario con ID ${id} no existe`);
+    }
+    this.userRepository.delete(user.id);
 
     return {
       msg: 'Usuario eliminado correctamente',
