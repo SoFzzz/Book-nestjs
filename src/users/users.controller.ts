@@ -1,124 +1,50 @@
-import { Controller, Get, Param, Delete, Put, Body } from '@nestjs/common';
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
+  constructor(private usersService: UsersService) {}
 
-    private users: User[] = [
-        {
-            id: '1',
-            name: 'Daza',
-            email: 'bananoUcc@gmail.com'
-        },
+  @Get('')
+  getAllUsers() {
+    return this.usersService.findAll();
+  }
 
-        {
-            "id": "2",
-            "name": "Camilo",
-            "email": "camilo.dev@gmail.com"
-        },
+  @Get(':id')
+  getUserById(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findById(id);
+  }
 
-        {
-            "id": "3",
-            "name": "Valentina",
-            "email": "valen.ing@gmail.com"
-        },
+  @Get('search/:name')
+  getUserUserByName(@Param('name') name: string) {
+    return this.usersService.search(name);
+  }
 
-        {
-            "id": "4",
-            "name": "Mateo",
-            "email": "mateo.ucc@gmail.com"
-        },
+  @Post()
+  createUser(@Body() userPayload: CreateUserDto) {
+    return this.usersService.create(userPayload);
+  }
 
-        {
-            "id": "5",
-            "name": "Lucia",
-            "email": "lucia.codes@gmail.com"
-        },
+  @Delete(':id')
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.delete(id);
+  }
 
-        {
-            "id": "6",
-            "name": "Andres",
-            "email": "andres.soft@gmail.com"
-        },
-
-        {
-            "id": "7",
-            "name": "Mariana",
-            "email": "mariana.datos@gmail.com"
-        },
-
-        {
-            "id": "8",
-            "name": "Julian",
-            "email": "julian.net@gmail.com"
-        },
-
-        {
-            "id": "9",
-            "name": "Daniela",
-            "email": "dani.systems@gmail.com"
-        },
-
-        {
-            "id": "10",
-            "name": "Sebastian",
-            "email": "sebas.code@gmail.com"
-        }
-    ]
-
-    @Get()
-    getUsers(){
-    return this.users;
-}
-
-    @Get(':id')
-    getUserById(@Param('id') id: string){
-        console.log(',:: UserID:', id);
-        const data = this.users.find((user) => user.id === id);
-        console.log('.:: data: ', data);
-        
-        return data;
-    }
-
-    @Get('search/:name')
-    getEmailByName(@Param('name') name: string){
-        console.log(',:: UserName:', name);
-        const data = this.users.find((user) => user.name === name);
-        return data?.email;
-    }
-    
-    @Delete(':id')
-    deleteUser(@Param('id') id: string) {
-        console.log(',:: UserID:', id);
-        const position = this.users.findIndex((user) => user.id === id);
-        this.users.splice(position, 1);
-        return {msg: "Usuario eliminado correctamente"};
-    }
-
-
-    @Put(":id")
-    updateUser(@Param('id') id: string, @Body() changes: User){
-        console.log(',:: ID usuario: ', id);
-        console.log(',:: Cambios: ', changes);
-        const position = this.users.findIndex((user) => user.id === id);
-        if(position === -1){
-            return { msg: "Usuario no encontrado" };
-        }
-        
-        const currentData = this.users[position];
-        const updateUser = {
-            ... currentData,
-            ...changes
-        };
-
-        this.users[position] = updateUser;
-
-
-        return{ msg: "Usuario Actualizado", data: updateUser};
-    }
+  @Put(':id')
+  updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() changes: UpdateUserDto,
+  ) {
+    return this.usersService.update(id, changes);
+  }
 }
