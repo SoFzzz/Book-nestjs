@@ -14,6 +14,13 @@ export class CreateUserDto {
     @IsNotEmpty()
     @Length(6, 20)
     password: string;
+
+    @ValidateNested()
+    @Type(() => CreateProfileDto)
+    @IsNotEmpty()
+    profile: CreateProfileDto;
+
+
 }
 
 export class UpdateUserDto {
@@ -31,8 +38,8 @@ export class UpdateUserDto {
     @Length(6, 20)
     password: string;
 
-    @IsString()
+    @ValidateNested()
+    @Type(() => CreateProfileDto)
     @IsNotEmpty()
-    @Length(3, 8)
-    nickname?: string;
+    profile: CreateProfileDto;
 }

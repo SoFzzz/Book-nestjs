@@ -2,13 +2,17 @@ import {
   Body,
   Controller,
   Delete,
+  BadRequestException,
+  ForbiddenException,
   Get,
+  NotFoundException,
   Param,
-  ParseIntPipe,
   Post,
   Put,
+  UnprocessableEntityException,
+  ParseIntPipe,
 } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { CreateUserDto, UpdateUserDto } from './dtos/user.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -27,7 +31,8 @@ export class UsersController {
 
   @Get('search/:name')
   getUserUserByName(@Param('name') name: string) {
-    return this.usersService.search(name);
+    //return this.usersService.search(name);
+    return;
   }
 
   @Post()
@@ -41,10 +46,7 @@ export class UsersController {
   }
 
   @Put(':id')
-  updateUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() changes: UpdateUserDto,
-  ) {
+  updateUser(@Param('id', ParseIntPipe) id: number, @Body() changes: UpdateUserDto) {
     return this.usersService.update(id, changes);
   }
 }

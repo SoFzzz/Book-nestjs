@@ -1,4 +1,6 @@
 export interface Env {
+  MY_VAR: string;
+  OPEN_AI_API_KEY: string;
   POSTGRES_HOST: string;
   POSTGRES_PORT: string;
   POSTGRES_DB: string;

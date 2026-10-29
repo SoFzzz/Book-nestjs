@@ -3,8 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Env } from './env.model';
-import { PedidosController } from './pedidos/pedidos.controller';
-import { PruebaService } from './prueba/prueba.service';
 
 @Module({
   imports: [
@@ -27,7 +25,5 @@ import { PruebaService } from './prueba/prueba.service';
     }),
     UsersModule,
   ],
-  controllers: [PedidosController],
-  providers: [PruebaService],
 })
 export class AppModule {}
